@@ -1,4 +1,7 @@
 import * as THREE from 'https://unpkg.com/three/build/three.module.js'
+import { ServerConnection } from "./ServerConnection.ts";
+
+const serverConnection = new ServerConnection();
 
 var camera, scene, renderer;
 var geometry, material, mesh;
