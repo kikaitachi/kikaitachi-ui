@@ -7,6 +7,14 @@ document.getElementById('connectButton').onclick = () => {
   serverConnection.connect(document.getElementById('websocketUrl').value);
 };
 
+const view = document.getElementById('view');
+view.onchange = () => {
+  for (let i = 0; i < view.options.length; i++) {
+    const element = document.getElementById(view.options[i].value);
+    element.style.display = i === view.selectedIndex ? 'block' : 'none';
+  }
+};
+
 var camera, scene, renderer;
 var geometry, material, mesh;
 
@@ -27,6 +35,7 @@ function init() {
 
     renderer = new THREE.WebGLRenderer( { antialias: true } );
     renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.domElement.id = 'map';
     document.body.appendChild( renderer.domElement );
 }
 
