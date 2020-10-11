@@ -3,6 +3,10 @@ import { ServerConnection } from "./ServerConnection.ts";
 
 const serverConnection = new ServerConnection();
 
+document.getElementById('connectButton').onclick = () => {
+  serverConnection.connect(document.getElementById('websocketUrl').value);
+};
+
 var camera, scene, renderer;
 var geometry, material, mesh;
 

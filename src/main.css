@@ -1,7 +1,17 @@
-body {
-  margin: 0;
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2rem;
+  line-height: 2rem;
+  padding-left: 0.5rem;
 }
 
 canvas {
-  display: block;
+  position: fixed;
+  top: 2rem;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
