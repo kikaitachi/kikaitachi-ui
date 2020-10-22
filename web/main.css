@@ -1,0 +1,24 @@
+body {
+  margin: 0;
+}
+
+.leftSideBar {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 2;
+}
+
+#telemetry {
+  color: Silver;
+  text-shadow:
+   -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+     1px 1px 0 #000;
+}
+
+#canvas {
+  position: absolute;
+  z-index: 1;
+}
