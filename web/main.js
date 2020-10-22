@@ -1,5 +1,7 @@
-/*import * as THREE from 'https://unpkg.com/three/build/three.module.js'
-import { ServerConnection } from "./ServerConnection.ts";
+import * as THREE from '/three/build/three.module.js';
+import { OrbitControls } from '/three/examples/jsm/controls/OrbitControls.js';
+import { STLLoader }  from '/three/examples/jsm/loaders/STLLoader.js';
+import { ServerConnection } from "/ServerConnection.js";
 
 const connectButton = document.getElementById('connectButton');
 const serverConnection = new ServerConnection(
@@ -13,11 +15,7 @@ const serverConnection = new ServerConnection(
 connectButton.onclick = () => {
   connectButton.innerHTML = "Connecting...";
   serverConnection.connect(document.getElementById('websocketUrl').value);
-};*/
-
-import * as THREE from '/three/build/three.module.js';
-import { OrbitControls } from '/three/examples/jsm/controls/OrbitControls.js';
-import { STLLoader }  from '/three/examples/jsm/loaders/STLLoader.js';
+};
 
 var camera, scene, renderer;
 var geometry, material, mesh;

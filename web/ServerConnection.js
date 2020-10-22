@@ -1,18 +1,18 @@
-const MSG_TELEMETRY_DEFINITION: number = 0;
-const MSG_TELEMETRY: number = 1;
+const MSG_TELEMETRY_DEFINITION = 0;
+const MSG_TELEMETRY = 1;
 
 export class ServerConnection {
 
-  connected: boolean = false;
-  onConnected: () => void;
-  onDisconnected: () => void;
+  /*let connected = false;
+  let onConnected;
+  let onDisconnected;*/
 
-  constructor(onConnected: () => void, onDisconnected: () => void) {
+  constructor(onConnected, onDisconnected) {
     this.onConnected = onConnected;
     this.onDisconnected = onDisconnected;
   }
 
-  connect(url: string) {
+  connect(url) {
     const socket = new WebSocket(url);
     socket.onopen = (event) => {
       this.connected = true;
@@ -33,16 +33,17 @@ export class ServerConnection {
       console.log('WebSocket error: ' + event);
     }
     socket.onmessage = (event) => {
-      const reader: FileReader = new FileReader();
+      const reader = new FileReader();
     	reader.addEventListener("loadend", () => {
-        const bytes: Uint8Array = new Uint8Array(reader.result);
-        const data: DataView = new DataView(reader.result, 1);
-        if (bytes[0] == MSG_TELEMETRY_DEFINITION) {
+        const data = new DataView(reader.result, 0);
+        const msgType = data.getInt8(0);
+        console.log('Received message of type ' + msgType);
+        if (msgType == MSG_TELEMETRY_DEFINITION) {
           //const channel = data.getInt8(i * 5);
 					//const value = data.getFloate32(i * 5 + 1, true);
-        } else if (bytes[0] == MSG_TELEMETRY_DEFINITION) {
+        } else if (msgType == MSG_TELEMETRY) {
         } else {
-          console.log('Unknown message type: ' + bytes[0]);
+          console.log('Unknown message type: ' + msgType);
         }
       });
       reader.readAsArrayBuffer(event.data);
