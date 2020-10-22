@@ -1,3 +1,5 @@
+import { Message } from "/Message.js";
+
 const MSG_TELEMETRY_DEFINITION = 0;
 const MSG_TELEMETRY = 1;
 
@@ -35,11 +37,15 @@ export class ServerConnection {
     socket.onmessage = (event) => {
       const reader = new FileReader();
     	reader.addEventListener("loadend", () => {
-        const data = new DataView(reader.result, 0);
-        const msgType = data.getInt8(0);
+        const msg = new Message(new DataView(reader.result, 0));
+        const msgType = msg.getInt();
         console.log('Received message of type ' + msgType);
         if (msgType == MSG_TELEMETRY_DEFINITION) {
-          //const channel = data.getInt8(i * 5);
+          const id = msg.getInt();
+          const parentId = msg.getInt();
+          const type = msg.getInt();
+          const name = msg.getString();
+          console.log('Telemetry definition message: id = ' + id + ', parentId = ' + parentId + ', type = ' + type + ', name = ' + name);
 					//const value = data.getFloate32(i * 5 + 1, true);
         } else if (msgType == MSG_TELEMETRY) {
         } else {
