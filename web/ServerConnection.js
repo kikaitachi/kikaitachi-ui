@@ -38,12 +38,12 @@ export class ServerConnection {
       const reader = new FileReader();
     	reader.addEventListener("loadend", () => {
         const msg = new Message(new DataView(reader.result, 0));
-        const msgType = msg.getInt();
+        const msgType = msg.getUnsignedInt();
         console.log('Received message of type ' + msgType);
         if (msgType == MSG_TELEMETRY_DEFINITION) {
-          const id = msg.getInt();
-          const parentId = msg.getInt();
-          const type = msg.getInt();
+          const id = msg.getUnsignedInt();
+          const parentId = msg.getUnsignedInt();
+          const type = msg.getUnsignedInt();
           const name = msg.getString();
           console.log('Telemetry definition message: id = ' + id + ', parentId = ' + parentId + ', type = ' + type + ', name = ' + name);
 					//const value = data.getFloate32(i * 5 + 1, true);
