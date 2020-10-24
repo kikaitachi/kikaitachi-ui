@@ -31,7 +31,7 @@ export class Message {
   }
 
   getString() {
-    const len = this.getUnsignedInt();
+    const len = this.getSignedInt();
     let result = '';
     for (let i = 0; i < len; i++) {
       result += String.fromCharCode(this.dataView.getInt8(this.index++));
