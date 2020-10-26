@@ -1,5 +1,61 @@
+@font-face {
+  font-family: 'Saira Extra Condensed';
+  src: url("/fonts/SairaExtraCondensed-Thin.ttf") format("truetype");
+  font-weight: 100;
+}
+
+@font-face {
+  font-family: 'Saira Extra Condensed';
+  src: url("/fonts/SairaExtraCondensed-ExtraLight.ttf") format("truetype");
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: 'Saira Extra Condensed';
+  src: url("/fonts/SairaExtraCondensed-Light.ttf") format("truetype");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: 'Saira Extra Condensed';
+  src: url("/fonts/SairaExtraCondensed-Regular.ttf") format("truetype");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Saira Extra Condensed';
+  src: url("/fonts/SairaExtraCondensed-Medium.ttf") format("truetype");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'Saira Extra Condensed';
+  src: url("/fonts/SairaExtraCondensed-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: 'Saira Extra Condensed';
+  src: url("/fonts/SairaExtraCondensed-Bold.ttf") format("truetype");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: 'Saira Extra Condensed';
+  src: url("/fonts/SairaExtraCondensed-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+}
+
+@font-face {
+  font-family: 'Saira Extra Condensed';
+  src: url("/fonts/SairaExtraCondensed-Black.ttf") format("truetype");
+  font-weight: 900;
+}
+
 body {
   margin: 0;
+  font-family: 'Saira Extra Condensed', sans-serif;
+  font-size: 18px;
 }
 
 .leftSideBar {
@@ -22,3 +78,46 @@ body {
   position: absolute;
   z-index: 1;
 }
+
+.telemetryItem {
+  position: relative;
+  width: fit-content;
+  /*padding: 3px;*/
+  /*font-size: 5em;*/
+  color: #fff;
+  /*text-align: center;
+  letter-spacing: 5px;*/
+  /*margin: 5px;*/
+  background: #020117;
+}
+
+.telemetryItemName {
+  font-weight: 500;
+}
+
+.telemetryItemValue {
+  font-weight: 100;
+}
+
+/*.telemetryItem::after {
+  content: '';
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: -1px;
+  background: linear-gradient(12deg, ForestGreen, Black, Black);
+  z-index: -1;
+}*/
+
+/*.telemetryItem::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, #ffd800, #ff5520, #750cf2, #0cbcf2);
+  z-index: -2;
+  filter: blur(10px);
+}*/

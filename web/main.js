@@ -2,14 +2,29 @@ import * as THREE from '/three/build/three.module.js';
 import { OrbitControls } from '/three/examples/jsm/controls/OrbitControls.js';
 import { STLLoader }  from '/three/examples/jsm/loaders/STLLoader.js';
 import { ServerConnection } from "/ServerConnection.js";
+import { Telemetry } from "/Telemetry.js";
+
+const MSG_TELEMETRY_DEFINITION = 0;
+const MSG_TELEMETRY = 1;
 
 const connectButton = document.getElementById('connectButton');
+const telemetry = new Telemetry();
 const serverConnection = new ServerConnection(
   () => {
-    connectButton.innerHTML = "Disconnect";
+    connectButton.innerHTML = 'Disconnect';
+    telemetry.clearItems();
   },
   () => {
-    connectButton.innerHTML = "Connect";
+    connectButton.innerHTML = 'Connect';
+    //setTimeout(function() {connect(onmessage);}, reconnectInMs);
+  },
+  (msgType, msg) => {
+    if (msgType == MSG_TELEMETRY_DEFINITION) {
+      telemetry.addItem(msg);
+    } else if (msgType == MSG_TELEMETRY) {
+    } else {
+      console.log('Unknown message type: ' + msgType);
+    }
   }
 );
 connectButton.onclick = () => {
