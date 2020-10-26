@@ -82,13 +82,7 @@ body {
 .telemetryItem {
   position: relative;
   width: fit-content;
-  /*padding: 3px;*/
-  /*font-size: 5em;*/
   color: #fff;
-  /*text-align: center;
-  letter-spacing: 5px;*/
-  /*margin: 5px;*/
-  background: #020117;
 }
 
 .telemetryItemName {
@@ -98,26 +92,3 @@ body {
 .telemetryItemValue {
   font-weight: 100;
 }
-
-/*.telemetryItem::after {
-  content: '';
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  bottom: -1px;
-  background: linear-gradient(12deg, ForestGreen, Black, Black);
-  z-index: -1;
-}*/
-
-/*.telemetryItem::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(45deg, #ffd800, #ff5520, #750cf2, #0cbcf2);
-  z-index: -2;
-  filter: blur(10px);
-}*/
