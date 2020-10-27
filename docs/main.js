@@ -34,6 +34,7 @@ const serverConnection = new ServerConnection(
     if (msgType == MSG_TELEMETRY_ADD) {
       telemetry.addItem(msg);
     } else if (msgType == MSG_TELEMETRY_UPDATE) {
+      telemetry.updateItem(msg);
     } else {
       console.log('Unknown message type: ' + msgType);
     }

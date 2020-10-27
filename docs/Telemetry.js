@@ -31,8 +31,16 @@ export class Telemetry {
     itemContainer.className = 'telemetryItemContainer';
     const item = document.createElement("div");
     item.className = 'telemetryItem';
-    item.innerHTML = '<span class="telemetryItemName">' + name + '</span>: <span class="telemetryItemValue">' + value + '</span>';
+    item.innerHTML = '<span class="telemetryItemName">' + name + '</span>: <span class="telemetryItemValue" id="telemetryItemValue' + id + '">' + value + '</span>';
     itemContainer.appendChild(item);
     this.getContainer().appendChild(itemContainer);
+  }
+
+  updateItem(msg) {
+    const id = msg.readSignedInt();
+    console.log("Id: " + id);
+    const value = msg.readString(); // TODO: handle other types
+    const element = document.getElementById('telemetryItemValue' + id);
+    element.innerHTML = value;
   }
 };
