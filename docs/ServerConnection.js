@@ -1,5 +1,3 @@
-import { Message } from "/Message.js";
-
 export class ServerConnection {
 
   constructor(onConnected, onDisconnected, onMessage) {
@@ -13,7 +11,7 @@ export class ServerConnection {
     socket.onopen = (event) => {
       this.connected = true;
       if (this.onConnected) {
-        this.onConnected();
+        this.onConnected(socket);
       }
       console.log('WebSocket opened');
     };
@@ -30,10 +28,7 @@ export class ServerConnection {
     socket.onmessage = (event) => {
       const reader = new FileReader();
     	reader.addEventListener("loadend", () => {
-        const msg = new Message(new DataView(reader.result, 0));
-        const msgType = msg.getSignedInt();
-        console.log('Received message of type ' + msgType);
-        this.onMessage(msgType, msg);
+        this.onMessage(new DataView(reader.result, 0));
       });
       reader.readAsArrayBuffer(event.data);
     }

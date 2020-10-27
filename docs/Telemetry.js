@@ -11,17 +11,17 @@ export class Telemetry {
   }
 
   addItem(msg) {
-    const id = msg.getSignedInt();
-    const parentId = msg.getSignedInt();
-    const type = msg.getSignedInt();
-    const name = msg.getString();
+    const id = msg.readSignedInt();
+    const parentId = msg.readSignedInt();
+    const type = msg.readSignedInt();
+    const name = msg.readString();
     console.log('Telemetry definition message: id = ' + id + ', parentId = ' + parentId + ', type = ' + type + ', name = ' + name);
     let value = '';
     if (type == TELEMETRY_TYPE_INT) {
-      value = msg.getSignedInt();
+      value = msg.readSignedInt();
       console.log("Value: " + value);
     } else if (type == TELEMETRY_TYPE_STRING) {
-      value = msg.getString();
+      value = msg.readString();
       console.log("Value: " + value);
     } else {
       console.log('Unknown telemetry type: ' + type);

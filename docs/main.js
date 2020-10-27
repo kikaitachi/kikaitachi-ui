@@ -3,25 +3,37 @@ import { OrbitControls } from '/three/examples/jsm/controls/OrbitControls.js';
 import { STLLoader }  from '/three/examples/jsm/loaders/STLLoader.js';
 import { ServerConnection } from "/ServerConnection.js";
 import { Telemetry } from "/Telemetry.js";
+import { MessageIn, MessageOut } from "/Message.js";
 
-const MSG_TELEMETRY_DEFINITION = 0;
-const MSG_TELEMETRY = 1;
+const MSG_TELEMETRY_ADD = 0;
+const MSG_TELEMETRY_UPDATE = 1;
+const MSG_TELEMETRY_DELETE = 2;
+const MSG_TELEMETRY_QUERY = 3;
 
+let timer;
 const connectButton = document.getElementById('connectButton');
 const telemetry = new Telemetry();
 const serverConnection = new ServerConnection(
-  () => {
+  (socket) => {
     connectButton.innerHTML = 'Disconnect';
     telemetry.clearItems();
+    timer = setInterval(() => {
+      const msg = new MessageOut();
+      msg.writeSignedInt(MSG_TELEMETRY_QUERY);
+      socket.send(msg.getBuffer());
+    }, 500);
   },
   () => {
     connectButton.innerHTML = 'Connect';
-    //setTimeout(function() {connect(onmessage);}, reconnectInMs);
+    clearInterval(this.timer);
   },
-  (msgType, msg) => {
-    if (msgType == MSG_TELEMETRY_DEFINITION) {
+  (dataView) => {
+    const msg = new MessageIn(dataView);
+    const msgType = msg.readSignedInt();
+    console.log('Received message of type ' + msgType);
+    if (msgType == MSG_TELEMETRY_ADD) {
       telemetry.addItem(msg);
-    } else if (msgType == MSG_TELEMETRY) {
+    } else if (msgType == MSG_TELEMETRY_UPDATE) {
     } else {
       console.log('Unknown message type: ' + msgType);
     }
