@@ -49,12 +49,22 @@ const serverConnection = new ServerConnection(
     }
   }
 );
-connectButton.onclick = () => {
+
+const toggleConnection = () => {
   if (!serverConnection.isConnected()) {
     connectButton.innerHTML = "Connecting...";
     serverConnection.connect(robotUrl.innerHTML);
   } else {
     serverConnection.disconnect();
+  }
+}
+
+connectButton.onclick = toggleConnection;
+
+robotUrl.onkeydown = (event) => {
+  if (event.code == 'Enter' || event.code == 'NumpadEnter') {
+    event.preventDefault();
+    toggleConnection();
   }
 };
 
