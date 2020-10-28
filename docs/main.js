@@ -30,7 +30,6 @@ const serverConnection = new ServerConnection(
   (dataView) => {
     const msg = new MessageIn(dataView);
     const msgType = msg.readSignedInt();
-    console.log('Received message of type ' + msgType);
     if (msgType == MSG_TELEMETRY_ADD) {
       telemetry.addItem(msg);
     } else if (msgType == MSG_TELEMETRY_UPDATE) {

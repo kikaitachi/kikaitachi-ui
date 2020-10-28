@@ -2,6 +2,9 @@ const TELEMETRY_TYPE_INT = 0;
 const TELEMETRY_TYPE_STRING = 1;
 
 export class Telemetry {
+
+  #idToItem = new Map();
+
   getContainer() {
     return document.getElementById('telemetry');
   }
@@ -10,23 +13,23 @@ export class Telemetry {
     this.getContainer().innerHTML = '';
   }
 
+  readValue(msg, type) {
+    if (type == TELEMETRY_TYPE_INT) {
+      return msg.readSignedInt();
+    }
+    if (type == TELEMETRY_TYPE_STRING) {
+      return msg.readString();
+    }
+    console.log('Unknown telemetry type: ' + type);
+    return undefined;
+  }
+
   addItem(msg) {
     const id = msg.readSignedInt();
     const parentId = msg.readSignedInt();
     const type = msg.readSignedInt();
     const name = msg.readString();
-    console.log('Telemetry definition message: id = ' + id + ', parentId = ' + parentId + ', type = ' + type + ', name = ' + name);
-    let value = '';
-    if (type == TELEMETRY_TYPE_INT) {
-      value = msg.readSignedInt();
-      console.log("Value: " + value);
-    } else if (type == TELEMETRY_TYPE_STRING) {
-      value = msg.readString();
-      console.log("Value: " + value);
-    } else {
-      console.log('Unknown telemetry type: ' + type);
-      return;
-    }
+    const value = this.readValue(msg, type);
     const itemContainer = document.createElement("div");
     itemContainer.className = 'telemetryItemContainer';
     const item = document.createElement("div");
@@ -34,13 +37,24 @@ export class Telemetry {
     item.innerHTML = '<span class="telemetryItemName">' + name + '</span>: <span class="telemetryItemValue" id="telemetryItemValue' + id + '">' + value + '</span>';
     itemContainer.appendChild(item);
     this.getContainer().appendChild(itemContainer);
+    this.#idToItem.set(id, {
+      id: id,
+      parentId: parentId,
+      type: type,
+      name: name,
+      value: value,
+      containerElement: itemContainer,
+      valueElement: document.getElementById('telemetryItemValue' + id)
+    });
   }
 
   updateItem(msg) {
     const id = msg.readSignedInt();
-    console.log("Id: " + id);
-    const value = msg.readString(); // TODO: handle other types
-    const element = document.getElementById('telemetryItemValue' + id);
-    element.innerHTML = value;
+    const item = this.#idToItem.get(id);
+    if (item) {
+      const value = this.readValue(msg, item.type);
+      item.value = value;
+      item.valueElement.innerHTML = value;
+    }
   }
 };
