@@ -22,7 +22,7 @@ export class ServerConnection {
     };
     this.#socket.onclose = (event) => {
       this.#socket = null;
-      console.log('WebSocket closed with code: ' + event.code);
+      console.log('WebSocket closed with code ' + event.code + ' and reason ' + event.reason);
       if (this.onDisconnected) {
         this.onDisconnected();
       }
