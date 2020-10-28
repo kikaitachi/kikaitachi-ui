@@ -1,7 +1,6 @@
 export class ServerConnection {
 
-  socket;
-  #connected = false;
+  #socket = null;
 
   constructor(onConnected, onDisconnected, onMessage) {
     this.onConnected = onConnected;
@@ -10,29 +9,28 @@ export class ServerConnection {
   }
 
   isConnected() {
-    return this.#connected;
+    return this.#socket != null;
   }
 
   connect(url) {
-    this.socket = new WebSocket(url);
-    this.socket.onopen = (event) => {
-      this.#connected = true;
+    this.#socket = new WebSocket(url);
+    this.#socket.onopen = (event) => {
       if (this.onConnected) {
-        this.onConnected(this.socket);
+        this.onConnected(this.#socket);
       }
       console.log('WebSocket opened');
     };
-    this.socket.onclose = (event) => {
-      this.#connected = false;
+    this.#socket.onclose = (event) => {
+      this.#socket = null;
       console.log('WebSocket closed with code: ' + event.code);
       if (this.onDisconnected) {
         this.onDisconnected();
       }
     }
-    this.socket.onerror = (event) => {
+    this.#socket.onerror = (event) => {
       console.log('WebSocket error: ' + event);
     }
-    this.socket.onmessage = (event) => {
+    this.#socket.onmessage = (event) => {
       const reader = new FileReader();
     	reader.addEventListener("loadend", () => {
         this.onMessage(new DataView(reader.result, 0));
@@ -42,8 +40,8 @@ export class ServerConnection {
   }
 
   disconnect() {
-    if (this.#connected) {
-      this.socket.close();
+    if (this.#socket != null) {
+      this.#socket.close();
     }
   }
 };

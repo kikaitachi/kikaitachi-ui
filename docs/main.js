@@ -35,7 +35,7 @@ const serverConnection = new ServerConnection(
   },
   () => {
     connectButton.innerHTML = 'Connect';
-    clearInterval(this.timer);
+    clearInterval(timer);
   },
   (dataView) => {
     const msg = new MessageIn(dataView);
