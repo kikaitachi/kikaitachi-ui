@@ -36,7 +36,12 @@ export class Telemetry {
     item.className = 'telemetryItem';
     item.innerHTML = '<span class="telemetryItemName">' + name + '</span>: <span class="telemetryItemValue" id="telemetryItemValue' + id + '">' + value + '</span>';
     itemContainer.appendChild(item);
-    this.getContainer().appendChild(itemContainer);
+    const parentItem = this.#idToItem.get(parentId);
+    if (parentItem) {
+      parentItem.containerElement.appendChild(itemContainer);
+    } else {
+      this.getContainer().appendChild(itemContainer);
+    }
     this.#idToItem.set(id, {
       id: id,
       parentId: parentId,

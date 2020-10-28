@@ -11,6 +11,16 @@ const MSG_TELEMETRY_DELETE = 2;
 const MSG_TELEMETRY_QUERY = 3;
 
 let timer;
+
+const robotUrl = document.getElementById('robotUrl');
+if (window.location.hostname == 'localhost') {
+  robotUrl.innerHTML = 'ws://localhost:3001';
+} else {
+  robotUrl.innerHTML = 'ws://naminukas-demo.herokuapp.com:80';
+}
+robotUrl.spellcheck = false;
+robotUrl.focus();
+
 const connectButton = document.getElementById('connectButton');
 const telemetry = new Telemetry();
 const serverConnection = new ServerConnection(
@@ -41,7 +51,7 @@ const serverConnection = new ServerConnection(
 );
 connectButton.onclick = () => {
   connectButton.innerHTML = "Connecting...";
-  serverConnection.connect(document.getElementById('websocketUrl').value);
+  serverConnection.connect(robotUrl.innerHTML);
 };
 
 var camera, scene, renderer;

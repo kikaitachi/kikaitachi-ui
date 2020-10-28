@@ -56,13 +56,44 @@ body {
   margin: 0;
   font-family: 'Saira Extra Condensed', sans-serif;
   font-size: 18px;
+  color: Silver;
+  text-shadow:
+   -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+     1px 1px 0 #000;
 }
 
 .leftSideBar {
   position: absolute;
   top: 1rem;
-  left: 1rem;
   z-index: 2;
+}
+
+.connectForm {
+  margin-left: 1rem;
+}
+
+.connectLabel {
+  color: #fff;
+  font-weight: 500;
+}
+
+#robotUrl {
+  border-bottom: 1px dashed DarkGray;
+}
+
+#robotUrl:focus {
+  outline: none;
+}
+
+#connectButton {
+  color: #fff;
+  margin-left: 0.5rem;
+  padding: 0 0.5rem;
+  border: 2px solid Silver;
+  border-radius: 1rem;
+  cursor: pointer;
 }
 
 #telemetry {
@@ -77,6 +108,10 @@ body {
 #canvas {
   position: absolute;
   z-index: 1;
+}
+
+.telemetryItemContainer {
+  margin-left: 1rem;
 }
 
 .telemetryItem {
