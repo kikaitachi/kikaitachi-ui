@@ -50,8 +50,12 @@ const serverConnection = new ServerConnection(
   }
 );
 connectButton.onclick = () => {
-  connectButton.innerHTML = "Connecting...";
-  serverConnection.connect(robotUrl.innerHTML);
+  if (!serverConnection.isConnected()) {
+    connectButton.innerHTML = "Connecting...";
+    serverConnection.connect(robotUrl.innerHTML);
+  } else {
+    serverConnection.disconnect();
+  }
 };
 
 var camera, scene, renderer;
