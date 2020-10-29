@@ -21,8 +21,16 @@ if (window.location.hostname == 'localhost') {
 robotUrl.spellcheck = false;
 robotUrl.focus();
 
+function sendCommand(id, value) {
+  const msg = new MessageOut();
+  msg.writeSignedInt(MSG_TELEMETRY_UPDATE);
+  msg.writeSignedInt(id);
+  msg.writeSignedInt(value);
+  serverConnection.send(msg);
+}
+
 const connectButton = document.getElementById('connectButton');
-const telemetry = new Telemetry();
+const telemetry = new Telemetry(sendCommand);
 const serverConnection = new ServerConnection(
   (socket) => {
     connectButton.innerHTML = 'Disconnect';

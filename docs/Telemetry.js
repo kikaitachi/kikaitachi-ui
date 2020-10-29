@@ -7,8 +7,11 @@ export class Telemetry {
 
   #idToItem = new Map();
   #clickedShortcut = null;
+  #onTelemetryChanged;
 
-  constructor() {
+  constructor(onTelemetryChanged) {
+    this.#onTelemetryChanged = onTelemetryChanged;
+
     window.addEventListener('mouseup', event => {
       if (this.#clickedShortcut) {
         this.#clickedShortcut.classList.remove('pressed');
@@ -59,6 +62,7 @@ export class Telemetry {
       shortcut.addEventListener('mousedown', event => {
         shortcut.classList.add('pressed');
         this.#clickedShortcut = shortcut;
+        this.#onTelemetryChanged(id, 1);
       });
     } else {
       item.innerHTML = '<span class="telemetryItemName">' + name + '</span>: <span class="telemetryItemValue" id="telemetryItemValue' + id + '">' + value + '</span>';

@@ -39,6 +39,12 @@ export class ServerConnection {
     }
   }
 
+  send(msg) {
+    if (this.#socket != null) {
+      this.#socket.send(msg.getBuffer());
+    }
+  }
+
   disconnect() {
     if (this.#socket != null) {
       this.#socket.close();
