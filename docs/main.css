@@ -68,6 +68,7 @@ body {
   position: absolute;
   top: 1rem;
   z-index: 2;
+  pointer-events: none;
 }
 
 .connectForm {
@@ -81,6 +82,7 @@ body {
 
 #robotUrl {
   border-bottom: 1px dashed DarkGray;
+  pointer-events: auto;
 }
 
 #robotUrl:focus {
@@ -96,6 +98,7 @@ body {
   border-radius: 1rem;
   cursor: pointer;
   font-weight: 500;
+  pointer-events: auto;
 }
 
 #connectButton:hover {
@@ -146,6 +149,7 @@ body {
   margin-left: 5px;
   cursor: pointer;
   font-size: 14px;
+  pointer-events: auto;
 }
 
 .telemetryItemShortcut:hover {
