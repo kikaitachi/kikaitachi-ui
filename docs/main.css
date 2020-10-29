@@ -152,3 +152,8 @@ body {
   color: White;
   border-color: White;
 }
+
+.pressed {
+  border-bottom-width: 1px;
+  border-right-width: 1px;
+}

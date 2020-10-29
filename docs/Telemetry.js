@@ -6,6 +6,16 @@ const TELEMETRY_TYPE_STL = 3;
 export class Telemetry {
 
   #idToItem = new Map();
+  #clickedShortcut = null;
+
+  constructor() {
+    window.addEventListener('mouseup', event => {
+      if (this.#clickedShortcut) {
+        this.#clickedShortcut.classList.remove('pressed');
+        this.#clickedShortcut = null;
+      }
+    });
+  }
 
   getContainer() {
     return document.getElementById('telemetry');
@@ -36,17 +46,22 @@ export class Telemetry {
     itemContainer.className = 'telemetryItemContainer';
     const item = document.createElement("div");
     item.className = 'telemetryItem';
-    if (type == TELEMETRY_TYPE_ACTION) {
-      item.innerHTML = '<span class="telemetryItemName" style="vertical-align: middle">' + name + '</span> <span class="telemetryItemShortcut" id="telemetryItemValue' + id + '">' + value + '</span>';
-    } else {
-      item.innerHTML = '<span class="telemetryItemName">' + name + '</span>: <span class="telemetryItemValue" id="telemetryItemValue' + id + '">' + value + '</span>';
-    }
     itemContainer.appendChild(item);
     const parentItem = this.#idToItem.get(parentId);
     if (parentItem) {
       parentItem.containerElement.appendChild(itemContainer);
     } else {
       this.getContainer().appendChild(itemContainer);
+    }
+    if (type == TELEMETRY_TYPE_ACTION) {
+      item.innerHTML = '<span class="telemetryItemName" style="vertical-align: middle">' + name + '</span> <span class="telemetryItemShortcut" id="telemetryItemValue' + id + '">' + value + '</span>';
+      const shortcut = document.getElementById('telemetryItemValue' + id);
+      shortcut.addEventListener('mousedown', event => {
+        shortcut.classList.add('pressed');
+        this.#clickedShortcut = shortcut;
+      });
+    } else {
+      item.innerHTML = '<span class="telemetryItemName">' + name + '</span>: <span class="telemetryItemValue" id="telemetryItemValue' + id + '">' + value + '</span>';
     }
     this.#idToItem.set(id, {
       id: id,
