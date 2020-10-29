@@ -1,5 +1,7 @@
 const TELEMETRY_TYPE_INT = 0;
 const TELEMETRY_TYPE_STRING = 1;
+const TELEMETRY_TYPE_ACTION = 2;
+const TELEMETRY_TYPE_STL = 3;
 
 export class Telemetry {
 
@@ -17,7 +19,7 @@ export class Telemetry {
     if (type == TELEMETRY_TYPE_INT) {
       return msg.readSignedInt();
     }
-    if (type == TELEMETRY_TYPE_STRING) {
+    if (type == TELEMETRY_TYPE_STRING || type == TELEMETRY_TYPE_ACTION) {
       return msg.readString();
     }
     console.log('Unknown telemetry type: ' + type);
@@ -34,7 +36,11 @@ export class Telemetry {
     itemContainer.className = 'telemetryItemContainer';
     const item = document.createElement("div");
     item.className = 'telemetryItem';
-    item.innerHTML = '<span class="telemetryItemName">' + name + '</span>: <span class="telemetryItemValue" id="telemetryItemValue' + id + '">' + value + '</span>';
+    if (type == TELEMETRY_TYPE_ACTION) {
+      item.innerHTML = '<span class="telemetryItemName" style="vertical-align: middle">' + name + '</span> <span class="telemetryItemShortcut" id="telemetryItemValue' + id + '">' + value + '</span>';
+    } else {
+      item.innerHTML = '<span class="telemetryItemName">' + name + '</span>: <span class="telemetryItemValue" id="telemetryItemValue' + id + '">' + value + '</span>';
+    }
     itemContainer.appendChild(item);
     const parentItem = this.#idToItem.get(parentId);
     if (parentItem) {

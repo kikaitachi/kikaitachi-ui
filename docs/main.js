@@ -79,18 +79,19 @@ const toRadians = (degrees) => {
 
 function init() {
     camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 1000);
-    camera.position.z = 100;
+    camera.position.z = 160;
+    camera.position.y = 80;
 
     scene = new THREE.Scene();
 
     geometry = new THREE.BoxGeometry( 0.2, 0.2, 0.2 );
     material = new THREE.MeshNormalMaterial();
 
-    mesh = new THREE.Mesh( geometry, material );
+    mesh = new THREE.Mesh(geometry, material);
     scene.add( mesh );
 
-    renderer = new THREE.WebGLRenderer( { antialias: true } );
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.domElement.id = 'canvas';
     document.body.appendChild( renderer.domElement );
 
@@ -107,7 +108,16 @@ function init() {
 		stlLoader.load('/BeagleBoneBlue.stl', function(geometry) {
 			geometry.center();
 			scene.add(new THREE.Mesh(geometry.rotateZ(toRadians(-90)).translate(0, 0, 0.1), new THREE.MeshNormalMaterial()));
-		});
+    });
+
+    stlLoader.load('/suction-cup-connector.stl', function(geometry) {
+			geometry.center();
+			scene.add(new THREE.Mesh(geometry.rotateX(toRadians(-90)).translate(-75, 0, 0), new THREE.MeshNormalMaterial()));
+    });
+    stlLoader.load('/suction-cup-connector.stl', function(geometry) {
+			geometry.center();
+			scene.add(new THREE.Mesh(geometry.rotateX(toRadians(-90)).translate(75, 0, 0), new THREE.MeshNormalMaterial()));
+    });
 }
 
 function animate() {

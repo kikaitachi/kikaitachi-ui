@@ -88,12 +88,19 @@ body {
 }
 
 #connectButton {
-  color: #fff;
   margin-left: 0.5rem;
   padding: 0 0.5rem;
-  border: 2px solid Silver;
+  border: 1px solid Silver;
+  border-bottom: 3px solid Silver;
+  border-right: 3px solid Silver;
   border-radius: 1rem;
   cursor: pointer;
+  font-weight: 500;
+}
+
+#connectButton:hover {
+  color: White;
+  border-color: White;
 }
 
 #telemetry {
@@ -126,4 +133,22 @@ body {
 
 .telemetryItemValue {
   font-weight: 100;
+}
+
+.telemetryItemShortcut {
+  color: Silver;
+  border: 1px solid Silver;
+  border-bottom: 3px solid Silver;
+  border-right: 3px solid Silver;
+  border-radius: 5px;
+  padding: 0 5px;
+  font-weight: 500;
+  margin-left: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.telemetryItemShortcut:hover {
+  color: White;
+  border-color: White;
 }
