@@ -42,6 +42,13 @@ export class MessageIn {
     }
     return result;
   }
+
+  readBlob() {
+    const size = this.readSignedInt();
+    const blob = new Blob([this.dataView.buffer.slice(this.index, this.index + size)],	{ type: 'application/octet-stream' });
+    this.index += size;
+    return blob;
+  }
 };
 
 export class MessageOut {

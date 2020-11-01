@@ -51,6 +51,9 @@ export class Telemetry {
     if (type == TELEMETRY_TYPE_STRING || type == TELEMETRY_TYPE_COMMAND) {
       return msg.readString();
     }
+    if (type == TELEMETRY_TYPE_STL) {
+      return msg.readBlob();
+    }
     console.log('Unknown telemetry type: ' + type);
     return undefined;
   }
@@ -80,6 +83,8 @@ export class Telemetry {
         this.#clickedShortcut = shortcut;
         this.#onTelemetryChanged(id, 1);
       });
+    } else if (type == TELEMETRY_TYPE_STL) {
+      item.innerHTML = '<span class="telemetryItemName">' + name + '</span>';
     } else {
       item.innerHTML = '<span class="telemetryItemName">' + name + '</span>: <span class="telemetryItemValue" id="telemetryItemValue' + id + '">' + value + '</span>';
     }
