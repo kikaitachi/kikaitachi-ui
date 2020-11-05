@@ -5,11 +5,13 @@ const TELEMETRY_TYPE_STL = 3;
 
 export class Telemetry {
 
+  #map3d;
   #idToItem = new Map();
   #clickedShortcut = null;
   #onTelemetryChanged;
 
-  constructor(onTelemetryChanged) {
+  constructor(map3d, onTelemetryChanged) {
+    this.#map3d = map3d;
     this.#onTelemetryChanged = onTelemetryChanged;
 
     window.addEventListener('mouseup', event => {
@@ -84,6 +86,7 @@ export class Telemetry {
         this.#onTelemetryChanged(id, 1);
       });
     } else if (type == TELEMETRY_TYPE_STL) {
+      this.#map3d.addSTL(URL.createObjectURL(value), 0, 0, 0); // 75
       item.innerHTML = '<span class="telemetryItemName">' + name + '</span>';
     } else {
       item.innerHTML = '<span class="telemetryItemName">' + name + '</span>: <span class="telemetryItemValue" id="telemetryItemValue' + id + '">' + value + '</span>';
