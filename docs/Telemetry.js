@@ -7,7 +7,9 @@ export class Telemetry {
 
   #map3d;
   #idToItem = new Map();
+  #pressedCodes = new Set();
   #clickedShortcut = null;
+  #clickedId;
   #onTelemetryChanged;
 
   constructor(map3d, onTelemetryChanged) {
@@ -18,13 +20,17 @@ export class Telemetry {
       if (this.#clickedShortcut) {
         this.#clickedShortcut.classList.remove('pressed');
         this.#clickedShortcut = null;
+        this.#onTelemetryChanged(this.#clickedId, 0);
       }
     });
 
     document.addEventListener('keydown', event => {
-      this.#idToItem.forEach((key, value) => {
+      this.#idToItem.forEach((value) => {
         if (value.type == TELEMETRY_TYPE_COMMAND && value.value == event.code) {
-          this.#onTelemetryChanged(value.id, 1);
+          if (!this.#pressedCodes.has(event.code)) {
+            this.#onTelemetryChanged(value.id, 1);
+            this.#pressedCodes.add(event.code);
+          }
         }
       });
     });
@@ -33,6 +39,7 @@ export class Telemetry {
       this.#idToItem.forEach(value => {
         if (value.type == TELEMETRY_TYPE_COMMAND && value.value == event.code) {
           this.#onTelemetryChanged(value.id, 0);
+          this.#pressedCodes.delete(event.code);
         }
       });
     });
@@ -83,6 +90,7 @@ export class Telemetry {
       shortcut.addEventListener('mousedown', event => {
         shortcut.classList.add('pressed');
         this.#clickedShortcut = shortcut;
+        this.#clickedId = id;
         this.#onTelemetryChanged(id, 1);
       });
     } else if (type == TELEMETRY_TYPE_STL) {

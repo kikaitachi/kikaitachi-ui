@@ -26,6 +26,7 @@ function sendCommand(id, value) {
   msg.writeSignedInt(MSG_TELEMETRY_UPDATE);
   msg.writeSignedInt(id);
   msg.writeSignedInt(value);
+  console.log("Send value: " + value);
   serverConnection.send(msg);
 }
 
