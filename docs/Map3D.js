@@ -49,7 +49,8 @@ export class Map3D {
     	renderer.setSize(width, height);
     });
 
-    new OrbitControls(camera, renderer.domElement);
+    const orbitControls = new OrbitControls(camera, renderer.domElement);
+    orbitControls.keys = { LEFT: 0, RIGHT: 0, UP: 0, BOTTOM: 0 };
 
     animate();
   }
