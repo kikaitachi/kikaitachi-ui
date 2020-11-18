@@ -7,10 +7,6 @@ var geometry, material, mesh;
 
 const stlLoader = new STLLoader();
 
-const toRadians = (degrees) => {
-	return degrees * Math.PI / 180;
-};
-
 function animate() {
   requestAnimationFrame( animate );
 
@@ -55,14 +51,13 @@ export class Map3D {
     animate();
   }
 
-  addSTL(url, rotX, rotY, rotZ, posX, posY, postZ) {
+  addSTL(url, transforms) {
     stlLoader.load(url, geometry => {
-			geometry.center();
-			scene.add(new THREE.Mesh(geometry
-        .rotateX(toRadians(rotX))
-        .rotateY(toRadians(rotY))
-        .rotateZ(toRadians(rotZ))
-        .translate(posX, posY, postZ), new THREE.MeshNormalMaterial()));
+      geometry.center();
+      for (let i = 0; i < transforms.length; i++) {
+        geometry = transforms[i].apply(geometry);
+      }
+			scene.add(new THREE.Mesh(geometry, new THREE.MeshNormalMaterial()));
     });
   }
 };

@@ -1,3 +1,5 @@
+import { Transform } from "/Transform.js";
+
 export class MessageIn {
 
   constructor(dataView) {
@@ -31,9 +33,6 @@ export class MessageIn {
   }
 
   readDouble() {
-    /*const value = this.dataView.getFloat64(this.index, true);
-    this.index += 8;
-    return value;*/
     return this.readSignedInt() / this.readSignedInt();
   }
 
@@ -51,6 +50,14 @@ export class MessageIn {
     const blob = new Blob([this.dataView.buffer.slice(this.index, this.index + size)],	{ type: 'application/octet-stream' });
     this.index += size;
     return blob;
+  }
+
+  readTransforms() {
+    const transforms = [];
+    while (this.index < this.dataView.byteLength) {
+      transforms.push(new Transform(this.readSignedInt(), this.readSignedInt(), this.readDouble()));
+    }
+    return transforms;
   }
 };
 
