@@ -94,7 +94,8 @@ export class Telemetry {
         this.#onTelemetryChanged(id, 1);
       });
     } else if (type == TELEMETRY_TYPE_STL) {
-      this.#map3d.addSTL(URL.createObjectURL(value), 0, 0, 0); // 75
+      this.#map3d.addSTL(URL.createObjectURL(value),
+        msg.readDouble(), msg.readDouble(), msg.readDouble(), msg.readDouble(), msg.readDouble(), msg.readDouble());
       item.innerHTML = '<span class="telemetryItemName">' + name + '</span>';
     } else {
       item.innerHTML = '<span class="telemetryItemName">' + name + '</span>: <span class="telemetryItemValue" id="telemetryItemValue' + id + '">' + value + '</span>';

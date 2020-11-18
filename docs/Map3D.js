@@ -55,10 +55,14 @@ export class Map3D {
     animate();
   }
 
-  addSTL(url, x, y, z) {
+  addSTL(url, rotX, rotY, rotZ, posX, posY, postZ) {
     stlLoader.load(url, geometry => {
 			geometry.center();
-			scene.add(new THREE.Mesh(geometry/*.rotateX(toRadians(-90))*/.translate(x, y, z), new THREE.MeshNormalMaterial()));
+			scene.add(new THREE.Mesh(geometry
+        .rotateX(toRadians(rotX))
+        .rotateY(toRadians(rotY))
+        .rotateZ(toRadians(rotZ))
+        .translate(posX, posY, postZ), new THREE.MeshNormalMaterial()));
     });
   }
 };
