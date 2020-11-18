@@ -31,9 +31,10 @@ export class MessageIn {
   }
 
   readDouble() {
-    const value = this.dataView.getFloat64(this.index, true);
+    /*const value = this.dataView.getFloat64(this.index, true);
     this.index += 8;
-    return value;
+    return value;*/
+    return this.readSignedInt() / this.readSignedInt();
   }
 
   readString() {
