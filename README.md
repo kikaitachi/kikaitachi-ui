@@ -1,6 +1,8 @@
 # kikaitachi-ui
 
-Web interface to control robots
+Web interface to control robots.
+
+For example robot using this interface see [naminukas-brain project](https://github.com/kikaitachi/naminukas-brain).
 
 ## Usage
 
