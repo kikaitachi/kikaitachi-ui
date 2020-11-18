@@ -30,6 +30,8 @@ export class Telemetry {
           if (!this.#pressedCodes.has(event.code)) {
             this.#onTelemetryChanged(value.id, 1);
             this.#pressedCodes.add(event.code);
+            this.#clickedShortcut = document.getElementById('telemetryItemValue' + value.id);
+            this.#clickedShortcut.classList.add('pressed');
           }
         }
       });
@@ -40,6 +42,8 @@ export class Telemetry {
         if (value.type == TELEMETRY_TYPE_COMMAND && value.value == event.code) {
           this.#onTelemetryChanged(value.id, 0);
           this.#pressedCodes.delete(event.code);
+          this.#clickedShortcut.classList.remove('pressed');
+          this.#clickedShortcut = null;
         }
       });
     });
