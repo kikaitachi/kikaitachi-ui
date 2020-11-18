@@ -3,17 +3,12 @@ import { OrbitControls } from '/three/examples/jsm/controls/OrbitControls.js';
 import { STLLoader }  from '/three/examples/jsm/loaders/STLLoader.js';
 
 var camera, scene, renderer;
-var geometry, material, mesh;
 
 const stlLoader = new STLLoader();
 
 function animate() {
-  requestAnimationFrame( animate );
-
-  mesh.rotation.x += 0.01;
-  mesh.rotation.y += 0.02;
-
-  renderer.render( scene, camera );
+  requestAnimationFrame(animate);
+  renderer.render(scene, camera);
 }
 
 export class Map3D {
@@ -25,12 +20,6 @@ export class Map3D {
     camera.position.z = 60;
 
     scene = new THREE.Scene();
-
-    geometry = new THREE.BoxGeometry( 0.2, 0.2, 0.2 );
-    material = new THREE.MeshNormalMaterial();
-
-    mesh = new THREE.Mesh(geometry, material);
-    scene.add( mesh );
 
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -51,13 +40,14 @@ export class Map3D {
     animate();
   }
 
-  addSTL(url, transforms) {
-    stlLoader.load(url, geometry => {
-      geometry.center();
-      for (let i = 0; i < transforms.length; i++) {
-        geometry = transforms[i].apply(geometry);
-      }
-			scene.add(new THREE.Mesh(geometry, new THREE.MeshNormalMaterial()));
+  addSTL(url) {
+    return new Promise((resolve) => {
+      stlLoader.load(url, geometry => {
+        geometry.center();
+        const mesh = new THREE.Mesh(geometry, new THREE.MeshNormalMaterial());
+        scene.add(mesh);
+        resolve(mesh);
+      });
     });
   }
 };

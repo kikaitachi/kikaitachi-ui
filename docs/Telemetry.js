@@ -53,7 +53,7 @@ export class Telemetry {
     this.getContainer().innerHTML = '';
   }
 
-  readValue(msg, type) {
+  readDefinition(msg, type) {
     if (type == TELEMETRY_TYPE_INT) {
       return msg.readSignedInt();
     }
@@ -67,12 +67,26 @@ export class Telemetry {
     return undefined;
   }
 
+  readValue(msg, type) {
+    if (type == TELEMETRY_TYPE_INT) {
+      return msg.readSignedInt();
+    }
+    if (type == TELEMETRY_TYPE_STRING || type == TELEMETRY_TYPE_COMMAND) {
+      return msg.readString();
+    }
+    if (type == TELEMETRY_TYPE_STL) {
+      return msg.readTransforms();
+    }
+    console.log('Unknown telemetry type: ' + type);
+    return undefined;
+  }
+
   addItem(msg) {
     const id = msg.readSignedInt();
     const parentId = msg.readSignedInt();
     const type = msg.readSignedInt();
     const name = msg.readString();
-    const value = this.readValue(msg, type);
+    const value = this.readDefinition(msg, type);
     const itemContainer = document.createElement("div");
     itemContainer.className = 'telemetryItemContainer';
     const item = document.createElement("div");
@@ -94,7 +108,12 @@ export class Telemetry {
         this.#onTelemetryChanged(id, 1);
       });
     } else if (type == TELEMETRY_TYPE_STL) {
-      this.#map3d.addSTL(URL.createObjectURL(value), msg.readTransforms());
+      item.transforms = msg.readTransforms();
+      this.#map3d.addSTL(URL.createObjectURL(value)).then(geometry => {
+        for (let i = 0; i < item.transforms.length; i++) {
+          geometry = item.transforms[i].apply(geometry);
+        }
+      });
       item.innerHTML = '<span class="telemetryItemName">' + name + '</span>';
     } else {
       item.innerHTML = '<span class="telemetryItemName">' + name + '</span>: <span class="telemetryItemValue" id="telemetryItemValue' + id + '">' + value + '</span>';
@@ -115,8 +134,20 @@ export class Telemetry {
     const item = this.#idToItem.get(id);
     if (item) {
       const value = this.readValue(msg, item.type);
-      item.value = value;
-      item.valueElement.innerHTML = value;
+      if (item.type == TELEMETRY_TYPE_STL) {
+        // Revert old transforms
+        for (let i = item.transforms.length - 1; i >= 0; i++) {
+          geometry = item.transforms[i].revert(geometry);
+        }
+        // Apply new transforms
+        item.transforms = value;
+        for (let i = 0; i < item.transforms.length; i++) {
+          geometry = item.transforms[i].apply(geometry);
+        }
+      } else {
+        item.value = value;
+        item.valueElement.innerHTML = value;
+      }
     }
   }
 };

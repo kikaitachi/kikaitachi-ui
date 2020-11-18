@@ -30,12 +30,18 @@ export class Transform {
     } else if (this.#type == TRANSFORM_TYPE_MOVE) {
       switch (this.#axis) {
         case 0:
-          return geometry.translate(this.#value, 0, 0);
+          return geometry.translateX(this.#value);
         case 1:
-          return geometry.translate(0, this.#value, 0);
+          return geometry.translateY(this.#value);
         case 2:
-          return geometry.translate(0, 0, this.#value);
+          return geometry.translateZ(this.#value);
       }
     }
+  }
+
+  revert(geometry) {
+    this.#value = -this.#value;
+    this.apply(geometry);
+    this.#value = -this.#value;
   }
 };
