@@ -2,6 +2,7 @@ const TELEMETRY_TYPE_INT = 0;
 const TELEMETRY_TYPE_STRING = 1;
 const TELEMETRY_TYPE_COMMAND = 2;
 const TELEMETRY_TYPE_STL = 3;
+const TELEMETRY_TYPE_POINTS = 4;
 
 export class Telemetry {
 
@@ -28,6 +29,7 @@ export class Telemetry {
       this.#idToItem.forEach((value) => {
         if (value.type == TELEMETRY_TYPE_COMMAND && value.value == event.code) {
           if (!this.#pressedCodes.has(event.code)) {
+            console.log(event.location + '/' + event.originalEvent.location + '/' + event.altKey + '/' + event.ctrlKey + '/' + event.shiftKey);
             this.#onTelemetryChanged(value.id, 1);
             this.#pressedCodes.add(event.code);
             this.#clickedShortcut = document.getElementById('telemetryItemValue' + value.id);
@@ -40,6 +42,7 @@ export class Telemetry {
     document.addEventListener('keyup', event => {
       this.#idToItem.forEach(value => {
         if (value.type == TELEMETRY_TYPE_COMMAND && value.value == event.code) {
+          console.log(event.location + '/' + event.originalEvent.location + '/' + event.altKey + '/' + event.ctrlKey + '/' + event.shiftKey);
           this.#onTelemetryChanged(value.id, 0);
           this.#pressedCodes.delete(event.code);
           this.#clickedShortcut.classList.remove('pressed');
@@ -119,6 +122,8 @@ export class Telemetry {
         }
       });
       item.innerHTML = '<span class="telemetryItemName">' + name + '</span>';
+    } else if (type == TELEMETRY_TYPE_POINTS) {
+      this.#map3d.addPoints(msg.readPoints());
     } else {
       item.innerHTML = '<span class="telemetryItemName">' + name + '</span>: <span class="telemetryItemValue" id="telemetryItemValue' + id + '">' + value + '</span>';
     }

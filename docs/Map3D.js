@@ -50,4 +50,17 @@ export class Map3D {
       });
     });
   }
+
+  addPoints(coloredPoints) {
+    const vertices = [];
+    for (let i = 0; i < coloredPoints.length; i++) {
+      const p = coloredPoints[i];
+      vertices.push(p.x, p.y, p.z);
+    }
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+    const material = new THREE.PointsMaterial({ color: 0x888888 });
+    const points = new THREE.Points(geometry, material);
+    scene.add(points);
+  }
 };

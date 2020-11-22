@@ -59,6 +59,22 @@ export class MessageIn {
     }
     return transforms;
   }
+
+  readPoints() {
+    const points = [];
+    while (this.index < this.dataView.byteLength) {
+      points.push({
+        x: this.readDouble() * 1000,
+        y: this.readDouble() * 1000,
+        z: this.readDouble() * 1000,
+        r: this.readSignedInt(),
+        g: this.readSignedInt(),
+        b: this.readSignedInt()
+      });
+    }
+    console.log('Number of points: ' + points.length);
+    return points;
+  }
 };
 
 export class MessageOut {
