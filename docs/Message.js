@@ -45,6 +45,10 @@ export class MessageIn {
     return result;
   }
 
+  readByte() {
+    return this.dataView.getUint8(this.index++);
+  }
+
   readBlob() {
     const size = this.readSignedInt();
     const blob = new Blob([this.dataView.buffer.slice(this.index, this.index + size)],	{ type: 'application/octet-stream' });
@@ -67,9 +71,9 @@ export class MessageIn {
         x: this.readDouble() * 1000,
         y: this.readDouble() * 1000,
         z: this.readDouble() * 1000,
-        r: this.readSignedInt(),
-        g: this.readSignedInt(),
-        b: this.readSignedInt()
+        r: this.readByte(),
+        g: this.readByte(),
+        b: this.readByte()
       });
     }
     console.log('Number of points: ' + points.length);
