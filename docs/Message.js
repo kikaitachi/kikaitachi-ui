@@ -37,7 +37,7 @@ export class MessageIn {
   }
 
   readString() {
-    const len = this.readSignedInt();
+    const len = this.readUnsignedInt();
     let result = '';
     for (let i = 0; i < len; i++) {
       result += String.fromCharCode(this.dataView.getInt8(this.index++));
