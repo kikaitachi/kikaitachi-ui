@@ -47,7 +47,7 @@ const serverConnection = new ServerConnection(
   },
   (dataView) => {
     const msg = new MessageIn(dataView);
-    const msgType = msg.readSignedInt();
+    const msgType = msg.readUnsignedInt();
     if (msgType == MSG_TELEMETRY_ADD) {
       telemetry.addItem(msg);
     } else if (msgType == MSG_TELEMETRY_UPDATE) {

@@ -33,7 +33,7 @@ export class MessageIn {
   }
 
   readDouble() {
-    return this.readSignedInt() / this.readSignedInt();
+    return this.readSignedInt() / this.readUnsignedInt();
   }
 
   readString() {
@@ -50,7 +50,7 @@ export class MessageIn {
   }
 
   readBlob() {
-    const size = this.readSignedInt();
+    const size = this.readUnsignedInt();
     const blob = new Blob([this.dataView.buffer.slice(this.index, this.index + size)],	{ type: 'application/octet-stream' });
     this.index += size;
     return blob;
