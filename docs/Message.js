@@ -32,8 +32,10 @@ export class MessageIn {
     return value * sign;
   }
 
-  readDouble() {
-    return this.readSignedInt() / this.readUnsignedInt();
+  readFloat() {
+    const value = this.dataView.getFloat32(this.index);
+    this.index += 4;
+    return value;
   }
 
   readString() {
@@ -59,7 +61,7 @@ export class MessageIn {
   readTransforms() {
     const transforms = [];
     while (this.index < this.dataView.byteLength) {
-      transforms.push(new Transform(this.readSignedInt(), this.readSignedInt(), this.readDouble()));
+      transforms.push(new Transform(this.readSignedInt(), this.readSignedInt(), this.readFloat()));
     }
     return transforms;
   }
@@ -68,9 +70,9 @@ export class MessageIn {
     const points = [];
     while (this.index < this.dataView.byteLength) {
       points.push({
-        x: this.readDouble() * 1000,
-        y: this.readDouble() * 1000,
-        z: this.readDouble() * 1000,
+        x: this.readFloat() * 1000,
+        y: this.readFloat() * 1000,
+        z: this.readFloat() * 1000,
         r: this.readByte(),
         g: this.readByte(),
         b: this.readByte()
