@@ -1,3 +1,5 @@
+import { Button } from "/Button.js";
+
 const TELEMETRY_TYPE_INT = 0;
 const TELEMETRY_TYPE_STRING = 1;
 const TELEMETRY_TYPE_COMMAND = 2;
@@ -9,6 +11,7 @@ export class Telemetry {
   #map3d;
   #idToItem = new Map();
   #pressedCodes = new Set();
+  #pressedModifiers = new Set();
   #clickedShortcut = null;
   #clickedId;
   #onTelemetryChanged;
@@ -29,7 +32,7 @@ export class Telemetry {
       this.#idToItem.forEach((value) => {
         if (value.type == TELEMETRY_TYPE_COMMAND && value.value == event.code) {
           if (!this.#pressedCodes.has(event.code)) {
-            console.log(event.location + '/' + event.originalEvent.location + '/' + event.altKey + '/' + event.ctrlKey + '/' + event.shiftKey);
+            //console.log(event.location + '/' + event.originalEvent.location + '/' + event.altKey + '/' + event.ctrlKey + '/' + event.shiftKey);
             this.#onTelemetryChanged(value.id, 1);
             this.#pressedCodes.add(event.code);
             this.#clickedShortcut = document.getElementById('telemetryItemValue' + value.id);
@@ -42,7 +45,7 @@ export class Telemetry {
     document.addEventListener('keyup', event => {
       this.#idToItem.forEach(value => {
         if (value.type == TELEMETRY_TYPE_COMMAND && value.value == event.code) {
-          console.log(event.location + '/' + event.originalEvent.location + '/' + event.altKey + '/' + event.ctrlKey + '/' + event.shiftKey);
+          //console.log(event.location + '/' + event.originalEvent.location + '/' + event.altKey + '/' + event.ctrlKey + '/' + event.shiftKey);
           this.#onTelemetryChanged(value.id, 0);
           this.#pressedCodes.delete(event.code);
           this.#clickedShortcut.classList.remove('pressed');
@@ -106,13 +109,26 @@ export class Telemetry {
       this.getContainer().appendChild(itemContainer);
     }
     if (type == TELEMETRY_TYPE_COMMAND) {
-      item.innerHTML = '<span class="telemetryItemName" style="vertical-align: middle">' + name + '</span> <span class="telemetryItemShortcut" id="telemetryItemValue' + id + '">' + value + '</span>';
-      const shortcut = document.getElementById('telemetryItemValue' + id);
-      shortcut.addEventListener('mousedown', event => {
-        shortcut.classList.add('pressed');
-        this.#clickedShortcut = shortcut;
-        this.#clickedId = id;
-        this.#onTelemetryChanged(id, 1);
+      item.innerHTML = '<span class="telemetryItemName" style="vertical-align: middle">' + name + '</span>';
+      const shortcut = new Button(value)
+        .id('telemetryItemValue' + id)
+        .className('telemetryItemShortcut')
+        .onPress(event => {
+          event.target.classList.add('pressed');
+          this.#clickedShortcut = event.target;
+          this.#clickedId = id;
+          this.#onTelemetryChanged(id, 1);
+        })
+        .element();
+      item.appendChild(shortcut);
+      msg.readModifiers().forEach(modifier => {
+        shortcut.parentElement.insertBefore(new Button(modifier)
+          .className('telemetryItemShortcut')
+          .onPress(event => {
+            event.target.classList.add('pressed');
+            this.#pressedModifiers.add(modifier);
+          })
+          .element(), shortcut);
       });
     } else if (type == TELEMETRY_TYPE_STL) {
       item.transforms = msg.readTransforms();

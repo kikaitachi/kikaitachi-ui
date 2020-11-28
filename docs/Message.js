@@ -81,6 +81,14 @@ export class MessageIn {
     console.log('Number of points: ' + points.length);
     return points;
   }
+
+  readModifiers() {
+    const modifiers = [];
+    while (this.index < this.dataView.byteLength) {
+      modifiers.push(this.readString());
+    }
+    return modifiers;
+  }
 };
 
 export class MessageOut {
