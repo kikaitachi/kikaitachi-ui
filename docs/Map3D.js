@@ -17,7 +17,7 @@ export class Map3D {
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 100000);
     camera.position.x = 0;
     camera.position.y = 200;
-    camera.position.z = 500;
+    camera.position.z = 450;
 
     scene = new THREE.Scene();
 
@@ -43,14 +43,20 @@ export class Map3D {
     const gridHelper = new THREE.GridHelper(1000, 10);
     scene.add(gridHelper);
 
+    const spotLight = new THREE.SpotLight(0xffffff);
+    spotLight.position.set(1000, 1000, 1000);
+    scene.add(spotLight);
+
     animate();
   }
 
-  addSTL(url) {
+  addSTL(url, color) {
     return new Promise((resolve) => {
       stlLoader.load(url, geometry => {
         geometry.center();
-        const mesh = new THREE.Mesh(geometry, new THREE.MeshNormalMaterial());
+        const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({
+          color: color
+        }));
         scene.add(mesh);
         resolve(mesh);
       });

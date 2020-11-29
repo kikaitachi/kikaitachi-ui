@@ -131,13 +131,14 @@ export class Telemetry {
           .element(), shortcut);
       });
     } else if (type == TELEMETRY_TYPE_STL) {
+      item.color = msg.readUnsignedInt();
       item.transforms = msg.readTransforms();
-      this.#map3d.addSTL(URL.createObjectURL(value)).then(geometry => {
+      this.#map3d.addSTL(URL.createObjectURL(value), item.color).then(geometry => {
         for (let i = 0; i < item.transforms.length; i++) {
           geometry = item.transforms[i].apply(geometry);
         }
       });
-      item.innerHTML = '<span class="telemetryItemName">' + name + '</span>';
+      item.innerHTML = '<span class="partName" style="background-color: #' + new Number(item.color).toString(16) + '">' + name + '</span>';
     } else if (type == TELEMETRY_TYPE_POINTS) {
       this.#map3d.addPoints(msg.readPoints());
     } else {

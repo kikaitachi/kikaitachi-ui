@@ -134,6 +134,13 @@ body {
   font-weight: 500;
 }
 
+.partName {
+  padding: 0 5px;
+  border-radius: 5px;
+  text-shadow: none;
+  font-size: 90%;
+}
+
 .telemetryItemValue {
   font-weight: 100;
 }
