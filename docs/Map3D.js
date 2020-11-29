@@ -14,10 +14,10 @@ function animate() {
 export class Map3D {
 
   constructor() {
-    camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 1000);
+    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 100000);
     camera.position.x = 0;
-    camera.position.y = -130;
-    camera.position.z = 60;
+    camera.position.y = 200;
+    camera.position.z = 500;
 
     scene = new THREE.Scene();
 
@@ -36,6 +36,12 @@ export class Map3D {
 
     const orbitControls = new OrbitControls(camera, renderer.domElement);
     orbitControls.keys = { LEFT: 0, RIGHT: 0, UP: 0, BOTTOM: 0 };
+
+    const axesHelper = new THREE.AxesHelper(100);
+    scene.add(axesHelper);
+
+    const gridHelper = new THREE.GridHelper(1000, 10);
+    scene.add(gridHelper);
 
     animate();
   }
