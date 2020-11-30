@@ -38,6 +38,12 @@ export class MessageIn {
     return value;
   }
 
+  readDouble() {
+    const value = this.dataView.getFloat64(this.index);
+    this.index += 8;
+    return value;
+  }
+
   readString() {
     const len = this.readUnsignedInt();
     let result = '';
@@ -61,7 +67,7 @@ export class MessageIn {
   readTransforms() {
     const transforms = [];
     while (this.index < this.dataView.byteLength) {
-      transforms.push(new Transform(this.readSignedInt(), this.readSignedInt(), this.readFloat()));
+      transforms.push(new Transform(this.readSignedInt(), this.readSignedInt(), this.readDouble()));
     }
     return transforms;
   }
