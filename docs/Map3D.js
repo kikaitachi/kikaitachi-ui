@@ -6,10 +6,11 @@ var camera, scene, renderer;
 
 const stlLoader = new STLLoader();
 
-function animate() {
-  requestAnimationFrame(animate);
-  renderer.render(scene, camera);
-}
+const repaint = () => {
+  requestAnimationFrame(() => {
+    renderer.render(scene, camera);
+  });
+};
 
 export class Map3D {
 
@@ -31,11 +32,13 @@ export class Map3D {
     	const height = window.innerHeight;
     	camera.aspect = width / height;
     	camera.updateProjectionMatrix();
-    	renderer.setSize(width, height);
+      renderer.setSize(width, height);
+      repaint();
     });
 
     const orbitControls = new OrbitControls(camera, renderer.domElement);
     orbitControls.keys = { LEFT: 0, RIGHT: 0, UP: 0, BOTTOM: 0 };
+    orbitControls.addEventListener('change', repaint);
 
     const axesHelper = new THREE.AxesHelper(100);
     scene.add(axesHelper);
@@ -47,7 +50,7 @@ export class Map3D {
     spotLight.position.set(1000, 1000, 1000);
     scene.add(spotLight);
 
-    animate();
+    repaint();
   }
 
   addSTL(url, color) {
@@ -58,6 +61,7 @@ export class Map3D {
           color: color
         }));
         scene.add(mesh);
+        repaint();
         resolve(mesh);
       });
     });
@@ -80,5 +84,6 @@ export class Map3D {
     });
     const points = new THREE.Points(geometry, material);
     scene.add(points);
+    repaint();
   }
 };

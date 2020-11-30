@@ -75,5 +75,3 @@ robotUrl.onkeydown = (event) => {
     toggleConnection();
   }
 };
-
-
