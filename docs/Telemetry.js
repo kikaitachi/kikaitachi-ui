@@ -2,9 +2,10 @@ import { Button } from "/Button.js";
 
 const TELEMETRY_TYPE_INT = 0;
 const TELEMETRY_TYPE_STRING = 1;
-const TELEMETRY_TYPE_COMMAND = 2;
-const TELEMETRY_TYPE_STL = 3;
-const TELEMETRY_TYPE_POINTS = 4;
+const TELEMETRY_TYPE_FLOAT = 2;
+const TELEMETRY_TYPE_COMMAND = 3;
+const TELEMETRY_TYPE_STL = 4;
+const TELEMETRY_TYPE_POINTS = 5;
 
 export class Telemetry {
 
@@ -70,6 +71,9 @@ export class Telemetry {
     if (type == TELEMETRY_TYPE_STRING || type == TELEMETRY_TYPE_COMMAND) {
       return msg.readString();
     }
+    if (type == TELEMETRY_TYPE_FLOAT) {
+      return msg.readFloat();
+    }
     if (type == TELEMETRY_TYPE_STL) {
       return msg.readBlob();
     }
@@ -83,6 +87,9 @@ export class Telemetry {
     }
     if (type == TELEMETRY_TYPE_STRING || type == TELEMETRY_TYPE_COMMAND) {
       return msg.readString();
+    }
+    if (type == TELEMETRY_TYPE_FLOAT) {
+      return msg.readFloat();
     }
     if (type == TELEMETRY_TYPE_STL) {
       return msg.readTransforms();
