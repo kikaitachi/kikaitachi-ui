@@ -138,7 +138,7 @@ export class Telemetry {
           geometry = item.transforms[i].apply(geometry);
         }
       });
-      item.innerHTML = '<span class="partName" style="background-color: #' + new Number(item.color).toString(16) + '">' + name + '</span>';
+      item.innerHTML = '<span class="partName" style="background-color: #' + new Number(item.color).toString(16) + '99">' + name + '</span>';
     } else if (type == TELEMETRY_TYPE_POINTS) {
       this.#map3d.addPoints(msg.readPoints());
     } else {

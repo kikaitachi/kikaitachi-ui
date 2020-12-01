@@ -57,11 +57,7 @@ body {
   font-family: 'Saira Extra Condensed', sans-serif;
   font-size: 18px;
   color: Silver;
-  text-shadow:
-   -1px -1px 0 #000,
-    1px -1px 0 #000,
-    -1px 1px 0 #000,
-     1px 1px 0 #000;
+  text-shadow: 0 0 2px #000000, 0 0 5px #000000;
 }
 
 .leftSideBar {
@@ -108,11 +104,6 @@ body {
 
 #telemetry {
   color: Silver;
-  text-shadow:
-   -1px -1px 0 #000,
-    1px -1px 0 #000,
-    -1px 1px 0 #000,
-     1px 1px 0 #000;
 }
 
 #canvas {
@@ -137,7 +128,6 @@ body {
 .partName {
   padding: 0 5px;
   border-radius: 5px;
-  text-shadow: none;
   font-size: 90%;
 }
 
