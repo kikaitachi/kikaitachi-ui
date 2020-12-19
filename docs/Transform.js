@@ -41,7 +41,8 @@ export class Transform {
 
   revert(geometry) {
     this.#value = -this.#value;
-    this.apply(geometry);
+    const result = this.apply(geometry);
     this.#value = -this.#value;
+    return result;
   }
 };

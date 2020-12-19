@@ -106,17 +106,25 @@ export class Telemetry {
     const value = this.readDefinition(msg, type);
     const itemContainer = document.createElement("div");
     itemContainer.className = 'telemetryItemContainer';
-    const item = document.createElement("div");
-    item.className = 'telemetryItem';
-    itemContainer.appendChild(item);
+    const itemElement = document.createElement("div");
+    itemElement.className = 'telemetryItem';
+    itemContainer.appendChild(itemElement);
     const parentItem = this.#idToItem.get(parentId);
+    const item = {
+      id: id,
+      parentId: parentId,
+      type: type,
+      name: name,
+      value: value,
+      containerElement: itemContainer
+    };
     if (parentItem) {
       parentItem.containerElement.appendChild(itemContainer);
     } else {
       this.getContainer().appendChild(itemContainer);
     }
     if (type == TELEMETRY_TYPE_COMMAND) {
-      item.innerHTML = '<span class="telemetryItemName" style="vertical-align: middle">' + name + '</span>';
+      itemElement.innerHTML = '<span class="telemetryItemName" style="vertical-align: middle">' + name + '</span>';
       const shortcut = new Button(value)
         .id('telemetryItemValue' + id)
         .className('telemetryItemShortcut')
@@ -127,7 +135,7 @@ export class Telemetry {
           this.#onTelemetryChanged(id, 1);
         })
         .element();
-      item.appendChild(shortcut);
+      itemElement.appendChild(shortcut);
       msg.readModifiers().forEach(modifier => {
         shortcut.parentElement.insertBefore(new Button(modifier)
           .className('telemetryItemShortcut')
@@ -141,25 +149,19 @@ export class Telemetry {
       item.color = msg.readUnsignedInt();
       item.transforms = msg.readTransforms();
       this.#map3d.addSTL(URL.createObjectURL(value), item.color).then(geometry => {
+        item.geometry = geometry;
         for (let i = 0; i < item.transforms.length; i++) {
-          geometry = item.transforms[i].apply(geometry);
+          item.geometry = item.transforms[i].apply(item.geometry);
         }
       });
-      item.innerHTML = '<span class="partName" style="background-color: #' + new Number(item.color).toString(16) + '99">' + name + '</span>';
+      itemElement.innerHTML = '<span class="partName" style="background-color: #' + new Number(itemElement.color).toString(16) + '99">' + name + '</span>';
     } else if (type == TELEMETRY_TYPE_POINTS) {
       this.#map3d.addPoints(msg.readPoints());
     } else {
-      item.innerHTML = '<span class="telemetryItemName">' + name + '</span>: <span class="telemetryItemValue" id="telemetryItemValue' + id + '">' + value + '</span>';
+      itemElement.innerHTML = '<span class="telemetryItemName">' + name + '</span>: <span class="telemetryItemValue" id="telemetryItemValue' + id + '">' + value + '</span>';
     }
-    this.#idToItem.set(id, {
-      id: id,
-      parentId: parentId,
-      type: type,
-      name: name,
-      value: value,
-      containerElement: itemContainer,
-      valueElement: document.getElementById('telemetryItemValue' + id)
-    });
+    item.valueElement = document.getElementById('telemetryItemValue' + id);
+    this.#idToItem.set(id, item);
   }
 
   updateItem(msg) {
@@ -169,13 +171,13 @@ export class Telemetry {
       const value = this.readValue(msg, item.type);
       if (item.type == TELEMETRY_TYPE_STL) {
         // Revert old transforms
-        for (let i = item.transforms.length - 1; i >= 0; i++) {
-          geometry = item.transforms[i].revert(geometry);
+        for (let i = item.transforms.length - 1; i >= 0; i--) {
+          item.geometry = item.transforms[i].revert(item.geometry);
         }
         // Apply new transforms
         item.transforms = value;
         for (let i = 0; i < item.transforms.length; i++) {
-          geometry = item.transforms[i].apply(geometry);
+          item.geometry = item.transforms[i].apply(item.geometry);
         }
       } else {
         item.value = value;
