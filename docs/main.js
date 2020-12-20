@@ -12,14 +12,18 @@ const MSG_TELEMETRY_QUERY = 3;
 
 let timer;
 
-const robotUrl = document.getElementById('robotUrl');
-if (window.location.hostname == 'localhost') {
-  robotUrl.innerHTML = 'ws://localhost:3001';
+const params = new URLSearchParams(document.location.search.substring(1));
+const robotUrl = params.get("u");
+const robotUrlElement = document.getElementById('robotUrl');
+if (robotUrl) {
+  robotUrlElement.innerHTML = robotUrl;
+} else if (window.location.hostname == 'localhost') {
+  robotUrlElement.innerHTML = 'ws://localhost:3001';
 } else {
-  robotUrl.innerHTML = 'ws://naminukas-demo.herokuapp.com:80';
+  robotUrlElement.innerHTML = 'ws://naminukas-demo.herokuapp.com:80';
 }
-robotUrl.spellcheck = false;
-robotUrl.focus();
+robotUrlElement.spellcheck = false;
+robotUrlElement.focus();
 
 function sendCommand(id, value) {
   const msg = new MessageOut();
@@ -60,8 +64,7 @@ const serverConnection = new ServerConnection(
 
 const toggleConnection = () => {
   if (!serverConnection.isConnected()) {
-    connectButton.innerHTML = "Connecting...";
-    serverConnection.connect(robotUrl.innerHTML);
+    window.location.href = window.location.protocol + '//' + window.location.host + '?u=' + robotUrlElement.innerHTML;
   } else {
     serverConnection.disconnect();
   }
@@ -69,9 +72,13 @@ const toggleConnection = () => {
 
 connectButton.onclick = toggleConnection;
 
-robotUrl.onkeydown = (event) => {
+robotUrlElement.onkeydown = (event) => {
   if (event.code == 'Enter' || event.code == 'NumpadEnter') {
     event.preventDefault();
     toggleConnection();
   }
 };
+
+if (robotUrl) {
+  serverConnection.connect(robotUrl);
+}
