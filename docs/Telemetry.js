@@ -154,7 +154,7 @@ export class Telemetry {
           item.geometry = item.transforms[i].apply(item.geometry);
         }
       });
-      itemElement.innerHTML = '<span class="partName" style="background-color: #' + new Number(itemElement.color).toString(16) + '99">' + name + '</span>';
+      itemElement.innerHTML = '<span class="partName" style="background-color: #' + new Number(item.color).toString(16) + '99">' + name + '</span>';
     } else if (type == TELEMETRY_TYPE_POINTS) {
       this.#map3d.addPoints(msg.readPoints());
     } else {
