@@ -21,9 +21,9 @@ if (robotUrl) {
   robotUrlElement.innerHTML = 'ws://localhost:3001';
 } else {
   robotUrlElement.innerHTML = 'ws://naminukas-demo.herokuapp.com:80';
+  robotUrlElement.focus();
 }
 robotUrlElement.spellcheck = false;
-robotUrlElement.focus();
 
 function sendCommand(id, value) {
   const msg = new MessageOut();
