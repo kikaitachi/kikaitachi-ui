@@ -117,6 +117,13 @@ export class MessageOut {
     }
   }
 
+  writeString(value) {
+    this.writeSignedInt(value.length);
+    for (let i = 0; i < value.length; i++) {
+      this.bytes.push(value.charCodeAt(i));
+    }
+  }
+
   getBuffer() {
     const buffer = new ArrayBuffer(this.bytes.length);
     const dataView = new DataView(buffer);

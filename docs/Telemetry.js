@@ -7,12 +7,22 @@ const TELEMETRY_TYPE_COMMAND = 3;
 const TELEMETRY_TYPE_STL = 4;
 const TELEMETRY_TYPE_POINTS = 5;
 
+const MODIFIER_KEYS = [
+  "Alt",
+  "AltGraph",
+  "CapsLock",
+  "Control",
+  "Meta",
+  "NumLock",
+  "ScrollLock",
+  "Shift"
+];
+
 export class Telemetry {
 
   #map3d;
   #idToItem = new Map();
   #pressedCodes = new Set();
-  #pressedModifiers = new Set();
   #clickedShortcut = null;
   #clickedId;
   #onTelemetryChanged;
@@ -33,8 +43,7 @@ export class Telemetry {
       this.#idToItem.forEach((value) => {
         if (value.type == TELEMETRY_TYPE_COMMAND && value.value == event.code) {
           if (!this.#pressedCodes.has(event.code)) {
-            //console.log(event.location + '/' + event.originalEvent.location + '/' + event.altKey + '/' + event.ctrlKey + '/' + event.shiftKey);
-            this.#onTelemetryChanged(value.id, 1);
+            this.#onTelemetryChanged(value.id, 1, this.getModifiers(event));
             this.#pressedCodes.add(event.code);
             this.#clickedShortcut = document.getElementById('telemetryItemValue' + value.id);
             this.#clickedShortcut.classList.add('pressed');
@@ -46,14 +55,23 @@ export class Telemetry {
     document.addEventListener('keyup', event => {
       this.#idToItem.forEach(value => {
         if (value.type == TELEMETRY_TYPE_COMMAND && value.value == event.code) {
-          //console.log(event.location + '/' + event.originalEvent.location + '/' + event.altKey + '/' + event.ctrlKey + '/' + event.shiftKey);
-          this.#onTelemetryChanged(value.id, 0);
+          this.#onTelemetryChanged(value.id, 0, this.getModifiers(event));
           this.#pressedCodes.delete(event.code);
           this.#clickedShortcut.classList.remove('pressed');
           this.#clickedShortcut = null;
         }
       });
     });
+  }
+
+  getModifiers(event) {
+    const modifiers = [];
+    MODIFIER_KEYS.forEach(modifier => {
+      if (event.getModifierState(modifier)) {
+        modifiers.push(modifier);
+      }
+    })
+    return modifiers;
   }
 
   getContainer() {
@@ -141,7 +159,6 @@ export class Telemetry {
           .className('telemetryItemShortcut')
           .onPress(event => {
             event.target.classList.add('pressed');
-            this.#pressedModifiers.add(modifier);
           })
           .element(), shortcut);
       });

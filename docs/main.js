@@ -25,11 +25,14 @@ if (robotUrl) {
 }
 robotUrlElement.spellcheck = false;
 
-function sendCommand(id, value) {
+function sendCommand(id, value, modifiers) {
   const msg = new MessageOut();
   msg.writeSignedInt(MSG_TELEMETRY_UPDATE);
   msg.writeSignedInt(id);
   msg.writeSignedInt(value);
+  modifiers.forEach(modifier => {
+    msg.writeString(modifier);
+  });
   serverConnection.send(msg);
 }
 
