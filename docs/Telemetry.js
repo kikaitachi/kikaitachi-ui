@@ -23,21 +23,11 @@ export class Telemetry {
   #map3d;
   #idToItem = new Map();
   #pressedCodes = new Set();
-  #clickedShortcut = null;
-  #clickedId;
   #onTelemetryChanged;
 
   constructor(map3d, onTelemetryChanged) {
     this.#map3d = map3d;
     this.#onTelemetryChanged = onTelemetryChanged;
-
-    window.addEventListener('mouseup', event => {
-      if (this.#clickedShortcut) {
-        this.#clickedShortcut.classList.remove('pressed');
-        this.#clickedShortcut = null;
-        this.#onTelemetryChanged(this.#clickedId, 0);
-      }
-    });
 
     document.addEventListener('keydown', event => {
       this.#idToItem.forEach((value) => {
@@ -45,8 +35,7 @@ export class Telemetry {
           if (!this.#pressedCodes.has(event.code)) {
             this.#onTelemetryChanged(value.id, 1, this.getModifiers(event));
             this.#pressedCodes.add(event.code);
-            this.#clickedShortcut = document.getElementById('telemetryItemValue' + value.id);
-            this.#clickedShortcut.classList.add('pressed');
+            value.valueElement.classList.add('pressed');
           }
         }
       });
@@ -57,8 +46,7 @@ export class Telemetry {
         if (value.type == TELEMETRY_TYPE_COMMAND && value.value == event.code) {
           this.#onTelemetryChanged(value.id, 0, this.getModifiers(event));
           this.#pressedCodes.delete(event.code);
-          this.#clickedShortcut.classList.remove('pressed');
-          this.#clickedShortcut = null;
+          value.valueElement.classList.remove('pressed');
         }
       });
     });
@@ -148,9 +136,11 @@ export class Telemetry {
         .className('telemetryItemShortcut')
         .onPress(event => {
           event.target.classList.add('pressed');
-          this.#clickedShortcut = event.target;
-          this.#clickedId = id;
-          this.#onTelemetryChanged(id, 1);
+          this.#onTelemetryChanged(id, 1, this.getModifiers(event));
+        })
+        .onRelease(event => {
+          event.target.classList.remove('pressed');
+          this.#onTelemetryChanged(id, 0, this.getModifiers(event));
         })
         .element();
       itemElement.appendChild(shortcut);

@@ -5,7 +5,6 @@ export class Button {
   #className;
   #onPress;
   #onRelease;
-  #shortcut
 
   constructor(label) {
     this.#label = label;
@@ -31,11 +30,6 @@ export class Button {
     return this;
   }
 
-  shortcut(code) {
-    this.#shortcut = code;
-    return this;
-  }
-
   element() {
     const element = document.createElement('span');
     if (this.#id) {
@@ -49,6 +43,9 @@ export class Button {
     }
     if (this.#onPress) {
       element.addEventListener('mousedown', this.#onPress);
+    }
+    if (this.#onRelease) {
+      element.addEventListener('mouseup', this.#onRelease);
     }
     return element;
   }
