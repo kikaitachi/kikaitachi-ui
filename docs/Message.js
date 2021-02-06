@@ -1,4 +1,5 @@
 import { Transform } from "/Transform.js";
+import { Choices } from "/Choices.js";
 
 export class MessageIn {
 
@@ -94,6 +95,15 @@ export class MessageIn {
       modifiers.push(this.readString());
     }
     return modifiers;
+  }
+
+  readChoices() {
+    const selected = this.readUnsignedInt();
+    const choices = [];
+    while (this.index < this.dataView.byteLength) {
+      choices.push(this.readString());
+    }
+    return new Choices(choices, selected);
   }
 };
 

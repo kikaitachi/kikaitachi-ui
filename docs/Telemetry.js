@@ -6,7 +6,7 @@ const TELEMETRY_TYPE_FLOAT = 2;
 const TELEMETRY_TYPE_COMMAND = 3;
 const TELEMETRY_TYPE_STL = 4;
 const TELEMETRY_TYPE_POINTS = 5;
-const TELEMETRY_TYPE_CHOICE = 6;
+const TELEMETRY_TYPE_CHOICES = 6;
 
 const MODIFIER_KEYS = [
   "Alt",
@@ -84,12 +84,15 @@ export class Telemetry {
     if (type == TELEMETRY_TYPE_STL) {
       return msg.readBlob();
     }
+    if (type == TELEMETRY_TYPE_CHOICES) {
+      return msg.readChoices();
+    }
     console.log('Unknown telemetry type: ' + type);
     return undefined;
   }
 
   readValue(msg, type) {
-    if (type == TELEMETRY_TYPE_INT) {
+    if (type == TELEMETRY_TYPE_INT || type == TELEMETRY_TYPE_CHOICES) {
       return msg.readSignedInt();
     }
     if (type == TELEMETRY_TYPE_STRING || type == TELEMETRY_TYPE_COMMAND) {
@@ -163,6 +166,13 @@ export class Telemetry {
         }
       });
       itemElement.innerHTML = '<span class="partName" style="background-color: #' + new Number(item.color).toString(16) + '99">' + name + '</span>';
+    } else if (type == TELEMETRY_TYPE_CHOICES) {
+      const select = value.toDOM();
+      select.addEventListener('change', () => {
+        this.#onTelemetryChanged(id, select.selectedIndex);
+      });
+      itemElement.appendChild(document.createTextNode(name + ': '));
+      itemElement.appendChild(select);
     } else if (type == TELEMETRY_TYPE_POINTS) {
       this.#map3d.addPoints(msg.readPoints());
     } else {
@@ -187,6 +197,8 @@ export class Telemetry {
         for (let i = 0; i < item.transforms.length; i++) {
           item.geometry = item.transforms[i].apply(item.geometry);
         }
+      } else if (item.type == TELEMETRY_TYPE_CHOICES) {
+        item.value.select(value);
       } else {
         item.value = value;
         item.valueElement.innerHTML = value;

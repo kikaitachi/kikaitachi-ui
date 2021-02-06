@@ -158,3 +158,30 @@ body {
   border-bottom-width: 1px;
   border-right-width: 1px;
 }
+
+select {
+  pointer-events: auto;
+	display: inline-block;
+  font-family: 'Saira Extra Condensed', sans-serif;
+  font-size: 90%;
+  color: White;
+  text-shadow: 0 0 2px #000000, 0 0 5px #000000;
+	padding: 0 5px;
+	border-radius: 5px;
+  border: none;
+	appearance: none;
+	background-color: rgba(255, 255, 255, 0.3);
+}
+
+select:hover {
+	background-color: rgba(255, 255, 255, 0.4);
+}
+
+select:focus {
+	background-color: rgba(255, 255, 255, 0.4);
+	outline: none;
+}
+
+select option {
+  color: Black;
+}
