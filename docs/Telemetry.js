@@ -4,9 +4,10 @@ const TELEMETRY_TYPE_INT = 0;
 const TELEMETRY_TYPE_STRING = 1;
 const TELEMETRY_TYPE_FLOAT = 2;
 const TELEMETRY_TYPE_COMMAND = 3;
-const TELEMETRY_TYPE_STL = 4;
-const TELEMETRY_TYPE_POINTS = 5;
-const TELEMETRY_TYPE_CHOICES = 6;
+const TELEMETRY_TYPE_3DMODEL = 4;
+const TELEMETRY_TYPE_3DMODEL_REF = 5;
+const TELEMETRY_TYPE_POINTS = 6;
+const TELEMETRY_TYPE_CHOICES = 7;
 
 const MODIFIER_KEYS = [
   "Alt",
@@ -81,7 +82,8 @@ export class Telemetry {
     if (type == TELEMETRY_TYPE_FLOAT) {
       return msg.readFloat();
     }
-    if (type == TELEMETRY_TYPE_STL) {
+    if (type == TELEMETRY_TYPE_3DMODEL) {
+      msg.readString(); // TODO: handle mime_type
       return msg.readBlob();
     }
     if (type == TELEMETRY_TYPE_CHOICES) {
@@ -101,7 +103,7 @@ export class Telemetry {
     if (type == TELEMETRY_TYPE_FLOAT) {
       return msg.readFloat();
     }
-    if (type == TELEMETRY_TYPE_STL) {
+    if (type == TELEMETRY_TYPE_3DMODEL) {
       return msg.readTransforms();
     }
     console.log('Unknown telemetry type: ' + type);
@@ -156,7 +158,7 @@ export class Telemetry {
           })
           .element(), shortcut);
       });
-    } else if (type == TELEMETRY_TYPE_STL) {
+    } else if (type == TELEMETRY_TYPE_3DMODEL) {
       item.color = msg.readUnsignedInt();
       item.transforms = msg.readTransforms();
       this.#map3d.addSTL(URL.createObjectURL(value), item.color).then(geometry => {
@@ -187,7 +189,7 @@ export class Telemetry {
     const item = this.#idToItem.get(id);
     if (item) {
       const value = this.readValue(msg, item.type);
-      if (item.type == TELEMETRY_TYPE_STL) {
+      if (item.type == TELEMETRY_TYPE_3DMODEL) {
         // Revert old transforms
         for (let i = item.transforms.length - 1; i >= 0; i--) {
           item.geometry = item.transforms[i].revert(item.geometry);
