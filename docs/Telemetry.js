@@ -102,7 +102,7 @@ export class Telemetry {
     if (type == TELEMETRY_TYPE_FLOAT) {
       return msg.readFloat();
     }
-    if (type == TELEMETRY_TYPE_3DMODEL) {
+    if (type == TELEMETRY_TYPE_3DMODEL || type == TELEMETRY_TYPE_3DMODEL_REF) {
       return msg.readTransforms();
     }
     console.log('Unknown telemetry type: ' + type);
@@ -202,7 +202,7 @@ export class Telemetry {
     const item = this.#idToItem.get(id);
     if (item) {
       const value = this.readValue(msg, item.type);
-      if (item.type == TELEMETRY_TYPE_3DMODEL) {
+      if (item.type == TELEMETRY_TYPE_3DMODEL || item.type == TELEMETRY_TYPE_3DMODEL_REF) {
         // Revert old transforms
         for (let i = item.transforms.length - 1; i >= 0; i--) {
           item.geometry = item.transforms[i].revert(item.geometry);
