@@ -1,6 +1,7 @@
 export class ServerConnection {
 
   #socket = null;
+  #pendingMessages = new Set();
 
   constructor(onConnected, onDisconnected, onMessage) {
     this.onConnected = onConnected;
@@ -30,9 +31,13 @@ export class ServerConnection {
     this.#socket.onerror = (event) => {
       console.log('WebSocket error: ' + event);
     }
-    this.#socket.onmessage = async (event) => {
-      const buffer = await event.data.arrayBuffer();
-      this.onMessage(new DataView(buffer));
+    this.#socket.onmessage = (event) => {
+      const message = event.data.arrayBuffer();
+      this.#pendingMessages.add(message);
+      Promise.all(this.#pendingMessages).then((values) => {
+        this.#pendingMessages.delete(message);
+        this.onMessage(new DataView(values[values.length - 1]));
+      });
     }
   }
 
