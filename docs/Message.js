@@ -67,7 +67,7 @@ export class MessageIn {
 
   readTransforms() {
     const transforms = [];
-    while (this.index < this.dataView.byteLength) {
+    for (let count = this.readUnsignedInt(); count > 0; count--) {
       transforms.push(new Transform(this.readSignedInt(), this.readSignedInt(), this.readDouble()));
     }
     return transforms;

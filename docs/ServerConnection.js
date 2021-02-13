@@ -30,12 +30,9 @@ export class ServerConnection {
     this.#socket.onerror = (event) => {
       console.log('WebSocket error: ' + event);
     }
-    this.#socket.onmessage = (event) => {
-      const reader = new FileReader();
-    	reader.addEventListener("loadend", () => {
-        this.onMessage(new DataView(reader.result, 0));
-      });
-      reader.readAsArrayBuffer(event.data);
+    this.#socket.onmessage = async (event) => {
+      const buffer = await event.data.arrayBuffer();
+      this.onMessage(new DataView(buffer));
     }
   }
 

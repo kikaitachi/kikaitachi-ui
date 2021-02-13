@@ -82,9 +82,8 @@ export class Telemetry {
     if (type == TELEMETRY_TYPE_FLOAT) {
       return msg.readFloat();
     }
-    if (type == TELEMETRY_TYPE_3DMODEL) {
-      msg.readString(); // TODO: handle mime_type
-      return msg.readBlob();
+    if (type == TELEMETRY_TYPE_3DMODEL || type == TELEMETRY_TYPE_3DMODEL_REF) {
+      return undefined;
     }
     if (type == TELEMETRY_TYPE_CHOICES) {
       return msg.readChoices();
@@ -161,7 +160,21 @@ export class Telemetry {
     } else if (type == TELEMETRY_TYPE_3DMODEL) {
       item.color = msg.readUnsignedInt();
       item.transforms = msg.readTransforms();
-      this.#map3d.addSTL(URL.createObjectURL(value), item.color).then(geometry => {
+      msg.readString(); // TODO: handle mime_type
+      item.value = msg.readBlob();
+      this.#map3d.addSTL(URL.createObjectURL(item.value), item.color).then(geometry => {
+        item.geometry = geometry;
+        for (let i = 0; i < item.transforms.length; i++) {
+          item.geometry = item.transforms[i].apply(item.geometry);
+        }
+      });
+      itemElement.innerHTML = '<span class="partName" style="background-color: #' + new Number(item.color).toString(16) + '99">' + name + '</span>';
+    } else if (type == TELEMETRY_TYPE_3DMODEL_REF) {
+      item.color = msg.readUnsignedInt();
+      item.transforms = msg.readTransforms();
+      const refId = msg.readUnsignedInt();
+      item.value = this.#idToItem.get(refId).value;
+      this.#map3d.addSTL(URL.createObjectURL(item.value), item.color).then(geometry => {
         item.geometry = geometry;
         for (let i = 0; i < item.transforms.length; i++) {
           item.geometry = item.transforms[i].apply(item.geometry);
