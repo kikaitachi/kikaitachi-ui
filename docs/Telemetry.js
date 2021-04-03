@@ -39,6 +39,7 @@ export class Telemetry {
             this.#pressedCodes.add(event.code);
             value.valueElement.classList.add('pressed');
           }
+          event.preventDefault();
         }
       });
     });
@@ -49,6 +50,7 @@ export class Telemetry {
           this.#onTelemetryChanged(value.id, 0, this.getModifiers(event));
           this.#pressedCodes.delete(event.code);
           value.valueElement.classList.remove('pressed');
+          event.preventDefault();
         }
       });
     });
